@@ -26,6 +26,24 @@ button {
     text-align: center;
 }
 
+.removeButton{
+    size: 80px;
+    border-radius: 20px;
+    background-color: aquamarine;
+    border: 0;
+    text-align: center;
+}
+
+
+.pokemonContainer{
+    margin: 10%;
+    display:block;
+    size: 80px;
+    border-radius: 20px;
+    background-color: gray;
+    text-align: center;
+}
+
 #pokemoncard {
     background-color: palegoldenrod;
     margin: auto;

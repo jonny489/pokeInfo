@@ -13,35 +13,88 @@ async function getPokeData(pokemonName) {
   return data;
 }
 
+// Display pokemon Info
 function setPokemonContainer(pokemonData) {
+  // Get HTML elements
   let name = document.getElementById("name");
   let sprite = document.getElementById("sprite");
   let types = document.getElementById("types");
   let stats = document.getElementById("stats");
   let addButton = document.getElementById("addToTeam");
-  name.innerText = pokemonData.name;
-  console.log(pokemonData.sprites.front_default);
-  sprite.innerHTML = `<img src="${pokemonData.sprites.front_default}">`;
-  let typesContainer = document.createElement("ul");
-  for (i = 0; i < pokemonData.types.length; i++) {
-    let type = pokemonData.types[i].type.name;
-    let element = document.createElement("li");
-    element.innerText = type;
-    typesContainer.appendChild(element);
-  }
+
+  // Wipe Old pokemon Info
   types.innerHTML = "";
-  types.appendChild(typesContainer);
+  stats.innerHTML = "";
+
+  // Fill out types, takes into account if there are more than one type
+  let typesContainer = document.createElement("ul");
+  for (let i = 0; i < pokemonData.types.length; i++) {
+    let type = pokemonData.types[i].type.name;
+    let typeItem = document.createElement("li");
+    typeItem.innerText = type;
+    typesContainer.appendChild(typeItem);
+  }
+
   let statsContainer = document.createElement("ul");
-  for (i = 0; i < pokemonData.stats.length; i++) {
+  for (let i = 0; i < pokemonData.stats.length; i++) {
     let statType = pokemonData.stats[i].stat.name;
     let statValue = pokemonData.stats[i].base_stat;
     let listItem = document.createElement("li");
     listItem.innerText = statType + " : " + statValue;
     statsContainer.appendChild(listItem);
   }
-  stats.innerHTML = "";
+
+  // Setters, set the info back onto HTML
+  types.appendChild(typesContainer);
   stats.appendChild(statsContainer);
+  name.innerText = pokemonData.name;
+  sprite.innerHTML = `<img src="${pokemonData.sprites.front_default}">`;
+
+  addButton.onclick = () => addPokemonToTeam(pokemonData)
 }
+
+let teamContainer = document.getElementById('team')
+
+
+function renderTeam() {
+  teamContainer.innerHTML = ''
+
+  team.forEach(pokemonData => {
+    const card = document.createElement('div')
+    card.classList.add('pokemonContainer')
+
+    const name = document.createElement('p')
+    name.innerText = pokemonData.name;
+
+    const img = document.createElement('img')
+    img.src = pokemonData.sprites.front_default
+
+    const removeButton = document.createElement('button')
+    removeButton.innerText = 'Remove'
+    removeButton.addEventListener('click', () => {
+      team = team.filter(p => p.name !== pokemonData.name);
+      renderTeam();
+    })
+
+    // Actually build the card
+    card.appendChild(name);
+    card.appendChild(img)
+    card.appendChild(removeButton)
+
+    teamContainer.appendChild(card)
+  })
+}
+// Fix and replace with easier to read code, decouple DOM and Data
+function addPokemonToTeam (pokemonData){
+  if (team.length >= 6) {
+    alert('Your Team is full!')
+    return
+  }
+
+  team.push(pokemonData)
+  renderTeam();
+}
+
 
 input.addEventListener("keydown", async function (event) {
   if (event.key === "Enter") {
