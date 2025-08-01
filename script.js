@@ -2,6 +2,11 @@ let team = [];
 let input = document.querySelector("input");
 let pokemonName = "";
 let pokemonData = null;
+let teamContainer = document.getElementById('team')
+
+// Local Storage, checks if there is and gets it if there is
+team = JSON.parse(localStorage.getItem('team')) || [];
+renderTeam();
 
 // Function to fetch data
 // Need to learn async, await, promises, requests, whatnot
@@ -53,8 +58,6 @@ function setPokemonContainer(pokemonData) {
   addButton.onclick = () => addPokemonToTeam(pokemonData)
 }
 
-let teamContainer = document.getElementById('team')
-
 
 function renderTeam() {
   teamContainer.innerHTML = ''
@@ -92,6 +95,7 @@ function addPokemonToTeam (pokemonData){
   }
 
   team.push(pokemonData)
+  localStorage.setItem('team', JSON.stringify(team))
   renderTeam();
 }
 
